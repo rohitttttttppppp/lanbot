@@ -1,0 +1,45 @@
+import logging
+import telepot
+from googletrans import Translator
+
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+# Initialize the translator
+translator = Translator()
+
+# Define a function to handle the /start command
+def start(chat_id):
+    bot.sendMessage(chat_id, "Welcome to the Language Translation Bot made by @MrNobody1920! Send me a message and I'll translate it for you.")
+
+# Define a function to handle the /help command
+def help_command(chat_id):
+    bot.sendMessage(chat_id, "Send me a message and I'll translate it for you.")
+
+# Define a function to translate text
+def translate(chat_id, text):
+    translated_text = translator.translate(text, dest='en').text
+    bot.sendMessage(chat_id, f"Original: {text}\nTranslation: {translated_text}")
+
+# Define a function to handle incoming messages
+def handle(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    if content_type == 'text':
+        if msg['text'] == '/start':
+            start(chat_id)
+        elif msg['text'] == '/help':
+            help_command(chat_id)
+        else:
+            translate(chat_id, msg['text'])
+
+if __name__ == '__main__':
+    # Replace 'YOUR_TELEGRAM_BOT_TOKEN' with your actual bot token
+    bot = telepot.Bot('7081522933:AAGF-uCo1rPSxGlZdae8P9hMjVvRGiUJMxY')
+
+    # Start listening for incoming messages
+    bot.message_loop(handle)
+
+    # Keep the program running
+    print('Listening for messages...')
+    while True:
+        pass
